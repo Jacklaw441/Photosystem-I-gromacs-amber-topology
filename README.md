@@ -11,9 +11,7 @@ I realize now that I need to make informal notes for the procedure until I know 
 From PDB (OPM, really): 
 -Note which HIS residues are close to CLAs, be certain to protonate accordingly.
 
--Note CYS residues that bind SF4 clusters, new amino acid "ACYS" added to topology (protonation, bonds added "in post," charges and topology taken from literature and added to database of known AAs).
-
--SF4 topology taken from literature and added to topology. New "amino-acid" called SF4 added.
+-Note SF4 clusters and CYS residues that bind SF4 clusters added to topology (protonation, bonds added "in post," charges and topology taken from literature and added to database of known AAs). https://pubs.acs.org/doi/10.1021/ct800342w
 
 -Cofactor topologies generated from CHARMMGUI, LibParGen, or any similar FF building tool (C, N, O, H cofactors. Nothing troublesome like with SF4); protonated in IQmol then added back to structure.
 
