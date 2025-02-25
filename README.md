@@ -23,3 +23,7 @@ From PDB (OPM, really):
 
 -573PRO and 574ACYS creates a chain break... I have no idea why? 573PRO must be editted to be regular, and bonds, angles, dihedrals between the two should be defined manually.
     - Huzzah. The first ACYS will always cause a chain break. The workaround is to label all ACYS as CYS2, a disulfide CYS instead. The proper protonation and chains are made by GROMACS, however, you will need to edit the charges and atomtypes of these residues manually. Bridge bonds will still be added manually, but that is not different anyway.
+
+-CLA.itp taken from supplemental info of paper: https://onlinelibrary.wiley.com/doi/10.1002/jcc.23016#:~:text=We%20present%20a%20set%20of%20force%20field%20%28FF%29,%28three%20redox%20forms%29%2C%20chlorophyll%E2%80%90a%2C%20pheophytin%E2%80%90a%2C%20heme%E2%80%90b%2C%20and%20%CE%B2%E2%80%90carotene.?msockid=1e9f6f31b5046b4d055960a5b4ac6ab1
+    - This has a few mistakes. Atomnames are not always correct, but pattern can be figured and fixed. Some bondtypes are specified with not valid atomnames. Comment these out, they are not needed for chlorophylls.
+
