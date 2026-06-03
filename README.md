@@ -87,6 +87,9 @@ was used in an attempt to orient the tails as close to the electron density
 (.cif from the PDB website) as possible. This is an approximate starting 
 structure, and equillibration will help produce a more proper starting position.
 
+All protonated cofactors should be added back to the full structure. Note that
+this structure file has some residue numbers rearranged.
+
 ### 5. Add SF4–ACYS cross-residue bonded terms
 Run the bonding script to add the inter-residue Fe–S bonds, angles, 
 and dihedrals that pdb2gmx cannot generate automatically:
