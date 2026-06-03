@@ -15,7 +15,7 @@ This repository provides:
 - Individual cofactor topology files for chlorophyll a (CLA), 
   carotenoids, quinones, and lipids
 - Protein topology excerpts for the SF4 iron-sulfur clusters and 
-  coordinating cysteine residues (ACYS, BCYS, DCYS, ECYS)
+  coordinating cysteine residues (ACYS)
 - A script for adding cross-residue SF4–ACYS bonded terms that 
   cannot be generated automatically by pdb2gmx
 - GROMACS parameter files (.mdp) for energy minimisation, 
