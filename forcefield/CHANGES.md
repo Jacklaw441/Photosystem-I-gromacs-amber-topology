@@ -143,6 +143,7 @@ fe1 SH  CT           1   106.290    312.214264  ; same in both
 
 The following entries were added to the [ dihedraltypes ] directive:
 
+```
 ; SF4 dihedraltypes
  fe1 SH  CT  H1    9       0.0     58.70152     3 ; same in both
  fe1 fe1 SH  CT    9     180.0      0.00000     3 ;4.35136     3 ; absent from McCullagh and Voth
@@ -157,7 +158,7 @@ The following entries were added to the [ dihedraltypes ] directive:
  fe1 fe1 fe1 fe1   9     180.0      0.00000     5 ;1.50624     5 ; absent from McCullagh and Voth
  fe1 sf1 fe1 sf1   9     180.0     33.47200     4; absent from Chang and Kim
  fe1 SH  CT  CT    9       0.0      1.12968     2; absent from Chang and Kim
-
+```
 
 All parameters sourced from Chang and Kim (https://doi.org/10.1021/ct800342w);
 with correction terms from McCullagh and Voth (https://doi.org/10.1021/jp402441s)
