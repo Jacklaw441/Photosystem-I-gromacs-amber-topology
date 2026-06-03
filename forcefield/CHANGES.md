@@ -219,6 +219,28 @@ calculated together in one cohesive structure).
      N    N            -0.59532325  1    ; charges before accounting for virtual Hs: -0.94011525 + Virtual Hs: 0.344792
      H    H             0.34479200  2    ;                                            0.34479200
     CA    CT            0.57366825  3    ;                                            0.57366825
+    HA    H1           -0.14026425  4    ;                                           -0.14026425
+    CB    CT           -0.51993000  5    ;                                           -0.51993000
+   HB1    H1            0.22717663  6    ;                                            0.22717663
+   HB2    H1            0.22717663  7    ;                                            0.22717663
+    SG    SH           -0.60949075  8    ;                                           -0.60949075
+     C    C             0.31284625  9    ;                                            0.25626325               0.056583
+     O    O            -0.45678000 10    ;                                           -0.45678000
+ [ bonds ] 
+     N     H
+     N    CA
+    CA    HA
+    CA    CB
+    CA     C
+    CB   HB1
+    CB   HB2
+    CB    SG
+     C     O
+    -C     N
+ [ impropers ]
+    -C    CA     N     H
+    CA    +N     C     O
+
 ```
 
 ---
