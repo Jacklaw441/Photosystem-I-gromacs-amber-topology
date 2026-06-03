@@ -167,7 +167,7 @@ force field is provided in `forcefield/CHANGES.md`. In summary:
 |------|-------------|
 | ffnonbonded.itp | Added non-bonded parameters for fe1, sf1, and cofactor atom types |
 | ffbonded.itp | Added bonded parameters for SF4, ACYS, and cofactor interactions |
-| aminoacids.rtp | Added SF4, ACYS, BCYS, DCYS, ECYS residue definitions |
+| aminoacids.rtp | Added SF4 and ACYS residue definitions |
 | posre_ffbonded.itp | Updated to reflect new bonded parameters |
 | posre_ffnonbonded.itp | Updated to reflect new non-bonded parameters |
 
