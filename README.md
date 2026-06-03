@@ -1,4 +1,4 @@
-# PSI-AMBER03-topology
+# PSI-GROMACS (AMBER03) topology
 
 A GROMACS-compatible topology and modified AMBER03 force field for 
 molecular dynamics simulation of Photosystem I (PSI), based on the 
