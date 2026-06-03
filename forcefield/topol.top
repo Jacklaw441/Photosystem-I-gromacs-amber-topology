@@ -1,0 +1,59 @@
+;
+;	File 'topol.top' was generated
+;	By user: unknown (1000)
+;	On host: DESKTOP-JKK2DSI
+;	At date: Fri Nov 10 10:59:23 2023
+
+;
+;	This is a standalone topology file
+;
+;	Created by:
+;	                 :-) GROMACS - gmx pdb2gmx, VERSION 5.1.1 (-:
+;	
+;	Executable:   /usr/local/gromacs/bin/gmx
+;	Data prefix:  /usr/local/gromacs
+;	Command line:
+;	  gmx pdb2gmx -f chains.pdb
+;	Force field was read from current directory or a relative path - path added.
+;
+
+; Include forcefield parameters
+#include "./amber03.ff/forcefield.itp"
+
+; Include chain topologies
+#include "protein.itp"
+#include "./amber03.ff/LMG.itp"
+#include "./amber03.ff/PQN.itp"
+#include "./amber03.ff/CLA.itp"
+#include "./amber03.ff/LHG.itp"
+#include "./amber03.ff/45D.itp"
+#include "./amber03.ff/ECH.itp"
+#include "./amber03.ff/SQD.itp"
+#include "./amber03.ff/C7Z.itp"
+#include "./amber03.ff/LMT.itp"
+#include "./amber03.ff/EQ3.itp"
+#include "./amber03.ff/BCR.itp"
+#include "./amber03.ff/tip3p.itp"
+#include "./amber03.ff/ions.itp"
+[ system ]
+; Name
+Protein in water
+
+[ molecules ]
+; Compound        #mols
+Protein            1
+;CLA                1
+CLA               94
+BCR               18
+PQN                2
+C7Z                2
+EQ3                1
+ECH                1
+45D                1
+LMG                4
+LHG               10
+LMT                2
+SQD                2
+SOL              497
+SOL         148506
+NA               35
