@@ -1,27 +1,178 @@
-# Using GROMACS for non-standard systems
-A tutorial showing how to edit GROMACs force field files for a custom, non-standard protein.
+# PSI-AMBER03-topology
 
-GROMACs package is an incredibly useful tool for running molecular dynamics (MD) simulations, however, I have found that running MD for a system with complex cofactors requires significant editting of force field (FF) files and no online resource offers a thorough description of exactly which files must be editted. This is a problem for me, as my work requires just that. In this guide, I will walk through everything needed to simulate photosystem 1 using the GROMACs software. Other software used in this guide include Qchem, IQmol, WinCoot, Pymol, VMD, and CHARMM-GUI. 
-## SF4 
+A GROMACS-compatible topology and modified AMBER03 force field for 
+molecular dynamics simulation of Photosystem I (PSI), based on the 
+crystal structure 5OY0. This repository provides all files necessary 
+to reproduce the PSI simulation system.
 
+---
 
-********
-I realize now that I need to make informal notes for the procedure until I know that the prcoess is down. Trying to write a formal walkthrough when I don't yet know how to walk in the first place is impossible.
+## Contents
 
-From PDB (OPM, really): 
--Note which HIS residues are close to CLAs, be certain to protonate accordingly.
+This repository provides:
+- A modified AMBER03 force field accommodating the non-standard 
+  residues and cofactors present in PSI
+- Individual cofactor topology files for chlorophyll a (CLA), 
+  carotenoids, quinones, and lipids
+- Protein topology excerpts for the SF4 iron-sulfur clusters and 
+  coordinating cysteine residues (ACYS, BCYS, DCYS, ECYS)
+- A script for adding cross-residue SF4–ACYS bonded terms that 
+  cannot be generated automatically by pdb2gmx
+- GROMACS parameter files (.mdp) for energy minimisation, 
+  NVT equilibration, NPT equilibration, and NPT production MD
 
--Note SF4 clusters and CYS residues that bind SF4 clusters added to topology (protonation, bonds added "in post," charges and topology taken from literature and added to database of known AAs). https://pubs.acs.org/doi/10.1021/ct800342w
+---
 
--Cofactor topologies generated from CHARMMGUI, LibParGen, or any similar FF building tool (C, N, O, H cofactors. Nothing troublesome like with SF4); protonated in IQmol then added back to structure.
+## Background
 
--Protein+SF4 topology generated all together. Can cofactors be added to topology the same way? No need to do this, but I wonder if it could be simplified.
+Photosystem I is a trimeric membrane protein complex responsible for 
+light-driven electron transfer during photosynthesis. The system 
+presents several non-standard topology challenges for molecular 
+dynamics simulation:
 
--Manually add in "bridged" topology parameters. ACYS-SF4 bonds, angles, dihedrals must be added. Alternatively, define a "super-residue" that is 4 ACYS and SF4 all in one. BUT, this will then require adding in the protein backbone bonds for the ACYS alpha and carbonyl carbons. I like the current apporach.
+- Several chlorophyll a residues have incomplete phytol tails in the 
+  deposited crystal structure, requiring manual structural repair
+- Chlorophyll a and the [4Fe-4S] iron-sulfur clusters lack 
+  well-established AMBER-compatible parameters
+- Each [4Fe-4S] cluster is covalently coordinated by four cysteine 
+  residues (ACYS) across formally separate protein chains, 
+  requiring cross-residue bonded terms that pdb2gmx cannot generate 
+  automatically
 
--573PRO and 574ACYS creates a chain break... I have no idea why? 573PRO must be editted to be regular, and bonds, angles, dihedrals between the two should be defined manually.
-    - Huzzah. The first ACYS will always cause a chain break. The workaround is to label all ACYS as CYS2, a disulfide CYS instead. The proper protonation and chains are made by GROMACS, however, you will need to edit the charges and atomtypes of these residues manually. Bridge bonds will still be added manually, but that is not different anyway.
+---
 
--CLA.itp taken from supplemental info of paper: https://onlinelibrary.wiley.com/doi/10.1002/jcc.23016#:~:text=We%20present%20a%20set%20of%20force%20field%20%28FF%29,%28three%20redox%20forms%29%2C%20chlorophyll%E2%80%90a%2C%20pheophytin%E2%80%90a%2C%20heme%E2%80%90b%2C%20and%20%CE%B2%E2%80%90carotene.?msockid=1e9f6f31b5046b4d055960a5b4ac6ab1
-    - This has a few mistakes. Atomnames are not always correct, but pattern can be figured and fixed. Some bondtypes are specified with unspecified atom names. Comment these out, they are not needed for chlorophylls.
+## Requirements
 
+- GROMACS (made with 2021, but should be generally compatible with most versions)
+- AMBER03 force field (distributed with GROMACS)
+- Python 3.x (for the SF4-ACYS bonding script)
+- The 5OY0 crystal structure, available from the RCSB Protein Data 
+  Bank (https://www.rcsb.org/structure/5OY0); or the OPM reoriented structure.
+
+---
+
+## Usage
+
+### 1. Obtain the crystal structure
+Download 5OY0 from the RCSB PDB. Chains A-M are used for simulation; 
+chains a-m and 1-0 should be removed. Chain identifier information must 
+be stripped from the PDB file prior to topology generation. Additionally,
+you will need to remove any non-amino acid residues temporarily (then 
+add them back after protein.itp is generated).
+
+### 2. Install the modified force field
+Copy the `amber03_PSI.ff` directory into your GROMACS force field 
+directory, or into your working directory.
+
+### 3. Generate the protein topology
+Run pdb2gmx with the modified force field:
+
+```bash
+gmx pdb2gmx -f 5OY0_monomer_nochain.pdb -ff amber03_PSI -water tip3p
+```
+When prompted, you must specify where the protein chain is not continuous 
+(most prompts are not continuous).
+
+### 4. Add cofactor topologies
+The cofactor .itp files in the `cofactors/` directory should be 
+included in your system topology file (topol.top). Add an include 
+statement for each cofactor (CLA, BCR, PQN, etc...); topol.top is an 
+example of the overall topology file.
+
+A structure file with protonated cofactors is provided. If you are 
+using a different structure, you will need to protonate each cofactor
+(IQmol was used for these structures). Additionally, CLA molecules are 
+incomplete in the PDB structure. They were rebuilt in PyMol, then WinCoot
+was used in an attempt to orient the tails as close to the electron density
+(.cif from the PDB website) as possible. This is an approximate starting 
+structure, and equillibration will help produce a more proper starting position.
+
+### 5. Add SF4–ACYS cross-residue bonded terms
+Run the bonding script to add the inter-residue Fe–S bonds, angles, 
+and dihedrals that pdb2gmx cannot generate automatically:
+
+```bash
+python scripts/add_SF4_ACYS_bonds.py topol.top
+```
+This will create protein.itp, which has the needed SF4-ACYS terms.
+
+### 6. Define the simulation box
+Define a periodic simulation box around the protein. The `editconf` 
+command centres the protein and sets the box dimensions. Typically, 
+a dodecahedral box is recommended, but this work used a cubic box for 
+familiarity:
+
+```bash
+gmx editconf -f system.gro -o system_box.gro -c -d 1.0 -bt cubic
+```
+
+The `-d 1.0` flag sets a minimum distance of 1.0 nm between the protein 
+and the box edge. Adjust this value if your system requires a larger 
+buffer.
+
+### 7. Solvate the system
+Add explicit TIP3P water molecules to fill the simulation box:
+
+```bash
+gmx solvate -cp system_box.gro -cs spc216.gro -o system_solv.gro -p topol_SF4.top
+```
+
+Note that `gmx solvate` will automatically update the `[ molecules ]` 
+directive in `protein.top` to reflect the number of water molecules added.
+
+### 8. Add ions
+First, generate a .tpr file for the ion addition step using a minimal 
+.mdp file:
+
+```bash
+gmx grompp -f mdp/ions.mdp -c system_solv.gro -p topol_SF4.top -o ions.tpr
+```
+
+Then add ions to neutralise the system charge.
+
+```bash
+gmx genion -s ions.tpr -o system_ions.gro -p topol_SF4.top -pname NA -nname CL -neutral
+```
+
+See `scripts/README.md` for full usage instructions and a description 
+of the terms added.
+
+### 6. Run MD
+
+The `.mdp` files in the `mdp/` directory. Are provided. The order 
+they should be run is the following:
+
+```bash
+gmx grompp -f mdp/minim.mdp -c system.gro -p topol_SF4.top -o em.tpr
+gmx mdrun -v -deffnm em
+
+gmx grompp -f mdp/nvt.mdp -c em.gro -p topol_SF4.top -o nvt.tpr
+gmx mdrun -deffnm nvt
+
+gmx grompp -f mdp/npt.mdp -c nvt.gro -p topol_SF4.top -o npt.tpr
+gmx mdrun -deffnm npt
+
+gmx grompp -f mdp/md.mdp -c npt.gro -p topol_SF4.top -o md.tpr
+gmx mdrun -deffnm md
+```
+
+---
+
+## Force Field Modifications
+
+A complete change log of all modifications made to the stock AMBER03 
+force field is provided in `forcefield/CHANGES.md`. In summary:
+
+| File | Modification |
+|------|-------------|
+| ffnonbonded.itp | Added non-bonded parameters for fe1, sf1, and cofactor atom types |
+| ffbonded.itp | Added bonded parameters for SF4, ACYS, and cofactor interactions |
+| aminoacids.rtp | Added SF4, ACYS, BCYS, DCYS, ECYS residue definitions |
+| posre_ffbonded.itp | Updated to reflect new bonded parameters |
+| posre_ffnonbonded.itp | Updated to reflect new non-bonded parameters |
+
+---
+
+## Contact
+Slipchenko Research Lab
+Purdue University
